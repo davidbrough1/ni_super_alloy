@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+    <xs:element name="plasticDeformation">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="solidSolutionStress" type="stressType"/>
+                <xs:element name="precipitateStress" type="stressType"/>
+                <xs:element name="yieldStress" type="stressType"/>
+                <xs:element name="youngsModulus" type="stressType"/>
+                <xs:element name="optimumVolumeFraction" type="volumeFractionType"/>
+                <xs:element name="serviceTemperature" type="thermodynamicTemperatureType"/>
+                <xs:element name="ultimateTensileStress" type="stressType"/>
+                <xs:element name="ultimateTensileStrain" type="strainType"/>
+                <xs:element name="workToNecking" type="energyType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="uncertaintyType">
+        <xs:sequence>
+            <xs:element name="type" type="xs:string"/>
+            <xs:element name="value" type="xs:double"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="stressType">
+        <xs:sequence>
+            <xs:element name="value" type="xs:double"/>
+            <xs:element name="unit" type="stressUnitType"/>
+            <xs:element minOccurs="0" name="uncertainty" type="uncertaintyType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="stressUnitType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="thermodynamicTemperatureType">
+        <xs:sequence>
+            <xs:element name="value" type="xs:double"/>
+            <xs:element name="unit" type="thermodynamicTemperatureUnitType"/>
+            <xs:element minOccurs="0" name="uncertainty" type="uncertaintyType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="thermodynamicTemperatureUnitType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="energyType">
+        <xs:sequence>
+            <xs:element name="value" type="xs:double"/>
+            <xs:element name="unit" type="energyUnitType"/>
+            <xs:element minOccurs="0" name="uncertainty" type="uncertaintyType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="energyUnitType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="volumeFractionType">
+        <xs:sequence>
+            <xs:element name="value" type="xs:double"/>
+            <xs:element minOccurs="0" name="uncertainty" type="uncertaintyType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="strainType">
+        <xs:sequence>
+            <xs:element name="value" type="xs:double"/>
+            <xs:element minOccurs="0" name="uncertainty" type="uncertaintyType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="strainUnitType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+</xs:schema>

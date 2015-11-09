@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<gaInputs>
+	<noSamples>
+		<value>1</value>
+	</noSamples>
+	<noVariables>
+		<value>3</value>
+	</noVariables>
+	<noGenerations>
+		<value>1</value>
+	</noGenerations>
+	<serviceTemperature>
+		<value>1123</value>
+		<unit>kelvin</unit>
+	</serviceTemperature>
+	<lsampleRange>
+		<value>
+			<item>0.1</item>
+			<item>0.1</item>
+			<item>1123.0</item>
+		</value>
+	</lsampleRange>
+	<hsampleRange>
+		<value>
+			<item>0.25</item>
+			<item>0.2</item>
+			<item>1473.0</item>
+		</value>
+	</hsampleRange>
+	<binMemory>
+		<value>
+			<item>6</item>
+			<item>6</item>
+			<item>8</item>
+		</value>
+	</binMemory>
+</gaInputs>
+

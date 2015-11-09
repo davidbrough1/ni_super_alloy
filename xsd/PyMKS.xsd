@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:element name="pyMks">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="optimumVolumeFraction" type="volumeFractionType"/>
+                <xs:element name="optimumRadius" type="lengthType"/>
+                <xs:element name="youngsModulus" type="stressType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="uncertaintyType">
+        <xs:sequence>
+            <xs:element name="type" type="xs:string"/>
+            <xs:element name="value" type="xs:double"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="lengthType">
+        <xs:sequence>
+            <xs:element name="value" type="xs:double"/>
+            <xs:element name="unit" type="lengthUnitType"/>
+            <xs:element minOccurs="0" name="uncertainty" type="uncertaintyType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="lengthUnitType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="stressType">
+        <xs:sequence>
+            <xs:element name="value" type="xs:double"/>
+            <xs:element name="unit" type="stressUnitType"/>
+            <xs:element minOccurs="0" name="uncertainty" type="uncertaintyType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="stressUnitType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="volumeFractionType">
+        <xs:sequence>
+            <xs:element name="value" type="xs:double"/>
+            <xs:element minOccurs="0" name="uncertainty" type="uncertaintyType"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

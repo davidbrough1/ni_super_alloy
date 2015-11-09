@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+    <xs:element name="kinetics">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="composition" type="chemicalComposition"/>
+                <xs:element name="processTemperature" type="thermodynamicTemperatureType"/>
+                <xs:element name="serviceTemperature" type="thermodynamicTemperatureType"/>
+                <xs:element name="initialNumberDensity" type="numberDensityType"/>
+                <xs:element name="alloyDensity" type="massDensityType"/>
+                <xs:element name="eqVolumeFraction" type="volumeFractionType"/>
+                <xs:element name="interfaceEnergy" type="surfaceEnergyType"/>
+                <xs:element name="apbEnergy" type="surfaceEnergyType"/>
+                <xs:element name="processingTime" type="timeType"/>
+                <xs:element name="optimumVolumeFraction" type="volumeFractionType"/>
+                <xs:element name="optimumRadius" type="lengthType"/>
+                <xs:element name="solidSolutionStress" type="stressType"/>
+                <xs:element name="precipitateStress" type="stressType"/>
+                <xs:element name="yieldStress" type="stressType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="uncertaintyType">
+        <xs:sequence>
+            <xs:element name="type" type="xs:string"/>
+            <xs:element name="value" type="xs:double"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="stressType">
+        <xs:sequence>
+            <xs:element name="value" type="xs:double"/>
+            <xs:element name="unit" type="stressUnitType"/>
+            <xs:element minOccurs="0" name="uncertainty" type="uncertaintyType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="stressUnitType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="surfaceEnergyType">
+        <xs:sequence>
+            <xs:element name="value" type="xs:double"/>
+            <xs:element name="unit" type="surfaceEnergyUnitType"/>
+            <xs:element minOccurs="0" name="uncertainty" type="uncertaintyType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="surfaceEnergyUnitType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="timeType">
+        <xs:sequence>
+            <xs:element name="value" type="xs:double"/>
+            <xs:element name="unit" type="timeUnitType"/>
+            <xs:element minOccurs="0" name="uncertainty" type="uncertaintyType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="timeUnitType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="thermodynamicTemperatureType">
+        <xs:sequence>
+            <xs:element name="value" type="xs:double"/>
+            <xs:element name="unit" type="thermodynamicTemperatureUnitType"/>
+            <xs:element minOccurs="0" name="uncertainty" type="uncertaintyType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="thermodynamicTemperatureUnitType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="molarVolumeType">
+        <xs:sequence>
+            <xs:element name="value" type="xs:double"/>
+            <xs:element name="unit" type="molarVolumeUnitType"/>
+            <xs:element minOccurs="0" name="uncertainty" type="uncertaintyType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="molarVolumeUnitType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="massDensityType">
+        <xs:sequence>
+            <xs:element name="value" type="xs:double"/>
+            <xs:element name="unit" type="massDensityUnitType"/>
+            <xs:element minOccurs="0" name="uncertainty" type="uncertaintyType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="massDensityUnitType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="chemicalComposition">
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element name="element" type="amountOfSubstanceType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="amountOfSubstanceType">
+        <xs:sequence>
+            <xs:element name="chemicalElement" type="xs:string"/>
+            <xs:element name="value" type="xs:double"/>
+            <xs:element name="unit" type="amountOfSubstanceUnitType"/>
+            <xs:element minOccurs="0" name="uncertainty" type="uncertaintyType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="amountOfSubstanceUnitType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="lengthType">
+        <xs:sequence>
+            <xs:element name="value" type="xs:double"/>
+            <xs:element name="unit" type="lengthUnitType"/>
+            <xs:element minOccurs="0" name="uncertainty" type="uncertaintyType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="lengthUnitType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="numberDensityType">
+        <xs:sequence>
+            <xs:element name="value" type="xs:double"/>
+            <xs:element name="unit" type="numberDensityUnitType"/>
+            <xs:element minOccurs="0" name="uncertainty" type="uncertaintyType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="numberDensityUnitType">
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="volumeFractionType">
+        <xs:sequence>
+            <xs:element name="value" type="xs:double"/>
+            <xs:element minOccurs="0" name="uncertainty" type="uncertaintyType"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
