@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<pyMks>
+	<optimumVolumeFraction>
+		<value>0.0</value>
+	</optimumVolumeFraction>
+	<optimumRadius>
+		<item>
+			<value>0.0</value>
+		</item>
+		<item>
+			<unit>meter</unit>
+		</item>
+	</optimumRadius>
+	<youngsModulus>
+		<item>
+			<value>0.0</value>
+		</item>
+		<item>
+			<unit>MPa</unit>
+		</item>
+	</youngsModulus>
+</pyMks>
+
