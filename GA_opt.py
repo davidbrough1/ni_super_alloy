@@ -16,7 +16,6 @@ import os
 import random
 
 import matplotlib.pyplot as plt
-
 import time
 
 # ---- for PyMKS ----
@@ -36,6 +35,8 @@ import collections
 import dicttoxml
 import xmltodict
 from xml.dom.minidom import parseString
+
+from evaluation import evaluation
 
 # ************************ Micro-GA ************************
 # -- Initialization --
@@ -190,149 +191,6 @@ def gaussian(mode,x,mu,delta):
 
 	return re_value
 
-
-
-def evaluation(gen,start_samples,variables):
-
-	test_model = 0
-# =0 full calculation (CALPHAD+PyMKS+IrTM)
-# =1 Mechanistic models (PyMKS+IrTM)
-
-# --------------------------------- initialize model parameters -------------------------------------
-	ini_nudensity = 4E+26
-	no_outputs = 10
-
-# --------------------------------- initialize the arrays -------------------------------------
-	fitness = np.array([0]*no_samples,dtype=float)
-	variables = np.asarray(variables).reshape(no_samples,no_variables)
-	Vf_gammaprime = np.array([0]*no_samples,dtype=float)
-	csize_gammaprime = np.array([0]*no_samples,dtype=float)
-	Elasticity = np.array([0]*no_samples,dtype=float)
-
-#	print start_samples,len(variables[0])
-	print variables
-#----------------------------------------------------------------------------------------------
-
-	if (test_model == 0):
-
-		print "CALPHAD:",time.asctime(time.localtime(time.time()))
-		Time.write("CALPHAD: %s\n" % (time.asctime(time.localtime(time.time()))) )
-		microstructure = EQ_TCAPI(gen,no_samples,start_samples,len(variables[0]),variables,ini_nudensity,no_outputs)
-		microstructure = np.fromiter(microstructure, dtype=float, count=no_samples*no_outputs).reshape(no_samples,no_outputs)
-
-	# /*/*/*/ volume fraction and C.S. of gamma prime /*/*/*/
-		vf = microstructure[:,0]
-		ra = microstructure[:,1]
-
-		SS_stress = microstructure[:,3]
-		prec_stress = microstructure[:,4]
-
-#		print microstructure
-#		print "Solid Solution Strengthening",SS_stress
-#		print "Precipitation",prec_stress
-
-#		Ttest=variables[:,3]
-		Ttest= [T_service for x in xrange(no_samples)]
-#		print irreverisble.mechanics.__doc__
-
-# --------- Output to XML ---------
-		ind_xml = 0
-		dictKinetics = []
-		dictKinetics.append(('composition',({'element':({'chemicalElement':'Al'},{'value':variables[ind_xml,0]},{'unit':'molar fraction'})},{'element':({'chemicalElement':'Cr'},{'value':variables[ind_xml,1]},{'unit':'molar fraction'})})))
-#		dictKinetics.append(('composition',('element':{'value':variables[ind_xml,0]})))
-		dictKinetics.append(('processTemperature',({'value':variables[ind_xml,2]},{'unit':'kelvin'})))
-		dictKinetics.append(('serviceTemperature',({'value':T_service},{'unit':'kelvin'})))
-		dictKinetics.append(('initialNumberDensity',({'value':ini_nudensity},{'unit':'1/m^3'})))
-		dictKinetics.append(('alloyDensity',({'value':microstructure[ind_xml,2]},{'unit':'kg/m^3'})))
-		dictKinetics.append(('eqVolumeFraction',{'value':microstructure[ind_xml,6]}))
-		dictKinetics.append(('interfaceEnergy',({'value':microstructure[ind_xml,7]},{'unit':'J/m^2'})))
-		dictKinetics.append(('apbEnergy',({'value':microstructure[ind_xml,8]},{'unit':'J/m^2'})))
-		dictKinetics.append(('processingTime',({'value':microstructure[ind_xml,9]},{'unit':'minutes'})))
-		dictKinetics.append(('optimumVolumeFraction',{'value':microstructure[ind_xml,0]}))
-		dictKinetics.append(('optimumRadius',({'value':microstructure[ind_xml,1]},{'unit':'meter'})))
-		dictKinetics.append(('solidSolutionStress',({'value':microstructure[ind_xml,3]},{'unit':'MPa'})))
-		dictKinetics.append(('precipitateStress',({'value':microstructure[ind_xml,4]},{'unit':'MPa'})))
-		dictKinetics.append(('yieldStress',({'value':microstructure[ind_xml,5]},{'unit':'MPa'})))
-		dictKinetics = collections.OrderedDict(dictKinetics)
-#		print(dictKinetics)
-
-		Kineticsxml = dicttoxml.dicttoxml(dictKinetics,custom_root='kinetics',attr_type=False)
-		Kineticsschema = open('Kinetics.xml', 'w')
-#		Kineticsschema.write("%s\n" % (Kineticsxml))
-		Kineticsschema.write("%s\n" % (parseString(Kineticsxml).toprettyxml()))
-#
-# the present PyMKS model does not take radius into account
-#
-		print "PyMKS:",time.asctime(time.localtime(time.time()))
-		Time.write("PyMKS: %s\n" % (time.asctime(time.localtime(time.time()))) )
-		Elasticity = PyMKSElasticity(vf, ra)
-		Elasticity *= 1000
-
-# --------- Output to XML ---------
-# *** Output PyMKS results as .XML ***
-# --- ./envs/default/lib/python2.7/site-packages/dicttoxml.py has been modified (06/12/2015) ---
-#
-		ind_xml = 0
-		dictMKS = []
-		dictMKS.append(('optimumVolumeFraction',{'value':vf[ind_xml]}))
-		dictMKS.append(('optimumRadius',({'value':ra[ind_xml]},{'unit':'meter'})))
-		dictMKS.append(('youngsModulus',({'value':Elasticity[ind_xml]/1000.},{'unit':'MPa'})))
-		dictMKS = collections.OrderedDict(dictMKS)
-#		dictMKS = collections.OrderedDict([('optimumVolumeFraction',{'value':vf[ind_xml]}),('optimumRadius',({'value':ra[ind_xml]},{'unit':'meter'})),('youngsModulus',({'value':Elasticity[ind_xml]/1000.},{'unit':'MPa'}))])
-
-		MKSxml = dicttoxml.dicttoxml(dictMKS,custom_root='pyMks',attr_type=False)
-		PyMKSschema = open('PyMKS.xml', 'w')
-		PyMKSschema.write("%s\n" % (parseString(MKSxml).toprettyxml()))
-
-		print "Irreversible:",time.asctime(time.localtime(time.time()))
-		Time.write("Irreversible: %s\n" % (time.asctime(time.localtime(time.time()))) )
-		Stress_strain = irreverisble.mechanics(Elasticity,elastic_modulus,vf,prec_stress,SS_stress,Ttest,no_samples)
-		Stress_strain = np.array(Stress_strain).reshape(no_samples,3)
-
-# --------- Output to XML ---------
-		ind_xml = 0
-		dictPlastics = []
-		dictPlastics.append(('solidSolutionStress',({'value':SS_stress[ind_xml]},{'unit':'MPa'})))
-		dictPlastics.append(('precipitateStress',({'value':prec_stress[ind_xml]},{'unit':'MPa'})))
-		dictPlastics.append(('yieldStress',({'value':microstructure[ind_xml,5]},{'unit':'MPa'})))
-		dictPlastics.append(('youngsModulus',({'value':Elasticity[ind_xml]},{'unit':'MPa'})))
-		dictPlastics.append(('optimumVolumeFraction',{'value':vf[ind_xml]}))
-		dictPlastics.append(('serviceTemperature',({'value':T_service},{'unit':'Kelvin'})))
-		dictPlastics.append(('ultimateTensileStress',({'value':Stress_strain[ind_xml,0]},{'unit':'MPa'})))
-		dictPlastics.append(('ultimateTensileStrain',{'value':Stress_strain[ind_xml,1]}))
-		dictPlastics.append(('workToNecking',({'value':Stress_strain[ind_xml,2]},{'unit':'MPa'})))
-		dictPlastics = collections.OrderedDict(dictPlastics)
-
-		Plasticsxml = dicttoxml.dicttoxml(dictPlastics,custom_root='plasticDeformation',attr_type=False)
-		Plasticsschema = open('Plasticdeformation.xml', 'w')
-		Plasticsschema.write("%s\n" % (parseString(Plasticsxml).toprettyxml()))
-
-		fitness = Stress_strain[:,2]
-
-		print "Finish:",time.asctime(time.localtime(time.time()))
-		Time.write("Finish: %s\n" % (time.asctime(time.localtime(time.time()))) )
-
-	else:
-		vf = [0.158167]
-		ra = [5]
-
-		Elasticity = PyMKSElasticity(vf, ra)
-		Elasticity *= 1000
-		print "Results", Elasticity
-
-		prec_stress = [220., 330., 140., 120.]
-		SS_stress = [210., 100., 140., 200.]
-		Ttest= [923., 923., 923., 923.]
-#		Ttest= [300., 300., 350., 923.]
-
-		Stress_strain = irreverisble.mechanics(Elasticity,elastic_modulus,vf,prec_stress,SS_stress,Ttest,no_samples)
-		Stress_strain = np.array(Stress_strain).reshape(no_samples,3)
-		print Stress_strain
-
-		fitness = Stress_strain[:,0]
-
-
-	return fitness
 
 # $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 class DoubleArrayType:
@@ -560,8 +418,8 @@ if __name__ == '__main__':
 		Evolution = open('fitness.dat', 'w')
 
 	Best = open('best.dat', 'w')
-	Time = open('time.dat', 'w')
 
+	'''
 # +++++++ Loading TC API function +++++++
 	_file = 'TC_OPT.so'
 	_path = os.path.join(*(os.path.split(os.path.realpath(__file__))[:-1]+(_file,)))
@@ -572,6 +430,7 @@ if __name__ == '__main__':
 	EQ_TCAPI.argtypes = (ctypes.c_int,ctypes.c_int,ctypes.c_int,ctypes.c_int,DoubleArrayType,ctypes.c_double,ctypes.c_int)
 
 	EQ_TCAPI.restype = ctypes.POINTER(ctypes.c_double)
+	'''
 
 
 # $$$$ Initialize PyMKS $$$$
@@ -656,7 +515,7 @@ if __name__ == '__main__':
 
 		start_samples = start
 		fitness_arr = [0 for x in xrange(no_samples)]
-		fitness_arr = evaluation(gen,start_samples,temp_sample)
+		fitness_arr = evaluation(gen,no_samples,start_samples,temp_sample,no_variables,T_service)
 
 #		for i in range(no_samples):
 #			print "results: ",fitness_arr[i]

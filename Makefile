@@ -5,11 +5,6 @@ run_fname=TC_CALC
 
 all:
 	clear
-	rm -rf mechanics/*.dat kinetics.dat YStress.dat composition.dat *.LOG fitness.dat
-	python GA.py
-
-opt:
-	clear
 	rm -rf mechanics/*.dat kinetics.dat YStress.dat composition.dat *.LOG fitness.dat time.dat
 	python GA_opt.py
 
