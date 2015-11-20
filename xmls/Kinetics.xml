@@ -1,0 +1,66 @@
+<?xml version="1.0" ?>
+<kinetics>
+	<gaInputID>Ni3E1T_1440167610.850.052281</gaInputID>
+	<composition>
+		<chemicalElement>Al</chemicalElement>
+		<value>0.230952380952</value>
+		<unit>molar fraction</unit>
+		<chemicalElement>Cr</chemicalElement>
+		<value>0.166666666667</value>
+		<unit>molar fraction</unit>
+		<chemicalElement>Ni</chemicalElement>
+		<value>0.602380952381</value>
+		<unit>molar fraction</unit>
+	</composition>
+	<processTemperature>
+		<value>1176.52941176</value>
+		<unit>kelvin</unit>
+	</processTemperature>
+	<serviceTemperature>
+		<value>1123.0</value>
+		<unit>kelvin</unit>
+	</serviceTemperature>
+	<initialNumberDensity>
+		<value>4e+26</value>
+		<unit>1/m^3</unit>
+	</initialNumberDensity>
+	<alloyDensity>
+		<value>0.0</value>
+		<unit>kg/m^3</unit>
+	</alloyDensity>
+	<eqVolumeFraction>
+		<value>0.0</value>
+	</eqVolumeFraction>
+	<interfaceEnergy>
+		<value>0.0</value>
+		<unit>J/m^2</unit>
+	</interfaceEnergy>
+	<apbEnergy>
+		<value>0.0</value>
+		<unit>J/m^2</unit>
+	</apbEnergy>
+	<processingTime>
+		<value>0.0</value>
+		<unit>minutes</unit>
+	</processingTime>
+	<volumeFraction>
+		<value>0.3</value>
+	</volumeFraction>
+	<averageRadius>
+		<value>3E-7</value>
+		<unit>meter</unit>
+	</averageRadius>
+	<solidSolutionStress>
+		<value>155.0</value>
+		<unit>MPa</unit>
+	</solidSolutionStress>
+	<precipitateStress>
+		<value>231.0</value>
+		<unit>MPa</unit>
+	</precipitateStress>
+	<yieldStress>
+		<value>433.0</value>
+		<unit>MPa</unit>
+	</yieldStress>
+</kinetics>
+

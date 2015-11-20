@@ -7,6 +7,7 @@ import ctypes
 # **** For data schema ****
 import collections
 import dicttoxml
+import xmltodict
 from xml.dom.minidom import parseString
 #from ngc_nist import NGC
 
@@ -15,45 +16,42 @@ import irreverisble
 
 
 
-if __name__ == '__main__':
+kinetics = []
+with open('xmls/Kinetics.xml') as inpread:
+	kinetics = xmltodict.parse(inpread.read())
 
-        kinetics = []
-        with open('Kinetics.xml') as inpread:
-                kinetics = xmltodict.parse(inpread.read())
-
-        vf = int(GA_select['kinetics']['optimumVolumeFraction'])
-        ra = int(GA_select['kinetics']['optimumRadius'])
-        T_service = float(GA_select['kinetics']['serviceTemperature']['value'])
-	prec_stress = 
-	SS_stress =
+vf = float(kinetics['kinetics']['volumeFraction']['value'])
+ra = float(kinetics['kinetics']['averageRadius']['value'])
+T_service = float(kinetics['kinetics']['serviceTemperature']['value'])
+prec_stress = float(kinetics['kinetics']['precipitateStress']['value'])
+SS_stress = float(kinetics['kinetics']['precipitateStress']['value'])
 	
 
-        PyMKS = []
-        with open('PyMKS.xml') as inpread:
-                PyMKS = xmltodict.parse(inpread.read())
+PyMKS = []
+with open('xmls/PyMKS.xml') as inpread:
+	PyMKS = xmltodict.parse(inpread.read())
 
-        Elasticity = float(PyMKS['pyMks']['youngsModulus'])
+Elasticity = float(PyMKS['pyMks']['youngsModulus']['value'])
 
 
-	print "Irreversible:",time.asctime(time.localtime(time.time()))
-	Stress_strain = irreverisble.mechanics(Elasticity,elastic_modulus,vf,prec_stress,SS_stress,T_service,no_samples)
-	Stress_strain = np.array(Stress_strain).reshape(no_samples,3)
+        # +++ Thomas et al., J Mat. Pro. Tech, 177, 2006, 469 +++
+#       shear_modulus = 83100*(1.-0.5*(T-300.)/1673.)
+        # +++ Huang et al., Mat. Sci. Tech., 23, 2007, 1105 +++
+#       shear_modulus = 87416.4-32.73*T+0.00295*T*T
+        # +++ Fisher, Scripta Meta., 20, 1986, 279 +++
+#       Elastic_Moduli = 295 (gamma) (AVG),  GPa
+#       Elastic_Moduli = 289 (gamma_prime) (AVG),  GPa
 
-# --------- Output to XML ---------
-	ind_xml = int(0)
-	dictPlastics = []
-	dictPlastics.append(('solidSolutionStress',({'value':SS_stress[ind_xml]},{'unit':'MPa'})))
-	dictPlastics.append(('precipitateStress',({'value':prec_stress[ind_xml]},{'unit':'MPa'})))
-	dictPlastics.append(('yieldStress',({'value':microstructure[ind_xml,5]},{'unit':'MPa'})))
-	dictPlastics.append(('youngsModulus',({'value':Elasticity[ind_xml]},{'unit':'MPa'})))
-	dictPlastics.append(('optimumVolumeFraction',{'value':vf[ind_xml]}))
-	dictPlastics.append(('serviceTemperature',({'value':T_service},{'unit':'Kelvin'})))
-	dictPlastics.append(('ultimateTensileStress',({'value':Stress_strain[ind_xml,0]},{'unit':'MPa'})))
-	dictPlastics.append(('ultimateTensileStrain',{'value':Stress_strain[ind_xml,1]}))
-	dictPlastics.append(('workToNecking',({'value':Stress_strain[ind_xml,2]},{'unit':'MPa'})))
-	dictPlastics = collections.OrderedDict(dictPlastics)
+elas_gamma = (298.*3./8.)*(1.-0.5*(T_service-300.)/1673.)
+elas_gammaprime = (289.*3./8.)*(1.-0.5*(T_service-300.)/1673.)
+elastic_modulus = (elas_gamma, elas_gammaprime)
 
-	Plasticsxml = dicttoxml.dicttoxml(dictPlastics,custom_root='plasticDeformation',attr_type=False)
-	Plasticsschema = open('Plasticdeformation.xml', 'w')
-	Plasticsschema.write("%s\n" % (parseString(Plasticsxml).toprettyxml()))
+no_samples = 1
+
+print "Irreversible:",time.asctime(time.localtime(time.time()))
+Stress_strain = irreverisble.mechanics(Elasticity,elastic_modulus,vf,prec_stress,SS_stress,T_service,no_samples)
+Stress_strain = np.array(Stress_strain).reshape(no_samples,3)
+
+print 'UTS, MPa: ',Stress_strain[0][0],'  Strain_UTS, %:',Stress_strain[0][1],'  Work to necking, MPa%',Stress_strain[0][2]
+
 
