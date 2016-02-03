@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<pyMks>
+	<optimumVolumeFraction>
+		<value>0.3</value>
+	</optimumVolumeFraction>
+	<optimumRadius>
+		<value>3e-07</value>
+		<unit>meter</unit>
+	</optimumRadius>
+	<youngsModulus>
+		<value>90991.4140431</value>
+		<unit>MPa</unit>
+	</youngsModulus>
+</pyMks>
+

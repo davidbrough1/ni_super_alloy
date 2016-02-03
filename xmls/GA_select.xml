@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<ngcInputs>
+	<noGeneration>0</noGeneration>
+	<noSamples>1</noSamples>
+	<startSamples>0</startSamples>
+	<variables>
+		<value>0.13</value>
+		<value>0.12</value>
+		<value>1030</value>
+	</variables>
+	<serviceTemperature>
+		<value>1123</value>
+		<unit>kelvin</unit>
+	</serviceTemperature>
+</ngcInputs>
+

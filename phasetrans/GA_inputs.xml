@@ -1,0 +1,35 @@
+<?xml version="1.0" ?>
+<gaInputs>
+	<iD>Ni3E1T_1440167610.850.052281</iD>
+	<noSamples>12</noSamples>
+	<noVariables>3</noVariables>
+	<noGenerations>20</noGenerations>
+	<serviceTemperature>
+		<value>973</value>
+		<unit>kelvin</unit>
+	</serviceTemperature>
+	<searchDomain>
+		<variable>Al</variable>
+		<unit>molar fraction</unit>
+		<variable>Cr</variable>
+		<unit>molar fraction</unit>
+		<variable>processingTemperature</variable>
+		<unit>Kelvin</unit>
+	</searchDomain>
+	<lsampleRange>
+		<Al>0.03</Al>
+		<Cr>0.03</Cr>
+		<processingTemperature>973</processingTemperature>
+	</lsampleRange>
+	<hsampleRange>
+		<Al>0.20</Al>
+		<Cr>0.20</Cr>
+		<processingTemperature>1473.0</processingTemperature>
+	</hsampleRange>
+	<binMemory>
+		<Al>6</Al>
+		<Cr>6</Cr>
+		<processingTemperature>8</processingTemperature>
+	</binMemory>
+</gaInputs>
+

@@ -1,0 +1,117 @@
+$... Thermo-Calc Database: 
+NIMOB   TC_DATA/NI_MOB_NIST.TDB      USR NI-MOB-GE NIST  Database V1.0!
+TCFE7   TC_DATA/TCFE7/TCFE7setup.TDC TCS Steels/Fe-Alloys Database v7.0!
+TCFE6   TC_DATA/TCFE6/TCFE6setup.TDC TCS Steels/Fe-Alloys Database v6.2!
+TCFE5   TC_DATA/TCFE5/TCFE5setup.TDC TCS Steels/Fe-Alloys Database v5.0!
+TCFE4   TC_DATA/TCFE4/TCFE4setup.TDC TCS Steels/Fe-Alloys Database v4.1!
+TCFE3   TC_DATA/TCFE3/TCFE3setup.TDC TCS Steels/Fe-Alloys Database v3.1!
+TCFE2   TC_DATA/TCFE2/TCFE2setup.TDC TCS Steels/Fe-Alloys Database v2.1!
+TCFE1   TC_DATA/TCFE1/TCFE1setup.TDC TCS Steels/Fe-Alloys Database v1.0!
+FEDAT   TC_DATA/FEDAT/FEDATsetup.TDC TCS/TT Steels Database v1.0!
+TCNI7   TC_DATA/TCNI7/TCNI7setup.TDC TCS Ni-Alloys Database v7.0!
+TCNI6   TC_DATA/TCNI6/TCNI6setup.TDC TCS Ni-Alloys Database v6.0!
+TCNI5   TC_DATA/TCNI5/TCNI5setup.TDC TCS Ni-Alloys Database v5.1!
+TCNI4   TC_DATA/TCNI4/TCNI4setup.TDC TCS Ni-Alloys Database v4.0!
+TCNI1   TC_DATA/TCNI1/TCNI1setup.TDC TCS Ni-Alloys Database v1.3!
+TCAL3   TC_DATA/TCAL3/TCAL3setup.TDC TCS Al-Alloys Database v3.0!
+TCAL2   TC_DATA/TCAL2/TCAL2setup.TDC TCS Al-Alloys Database v2.1!
+TCAL1   TC_DATA/TCAL1/TCAL1setup.TDC TCS Al-Alloys Database v1.2!
+TCMG3   TC_DATA/TCMG3/TCMG3setup.TDC TCS Mg-Alloys Database v3.0!
+TCMG2   TC_DATA/TCMG2/TCMG2setup.TDC TCS Mg-Alloys Database v2.0!
+TCMG1   TC_DATA/TCMG1/TCMG1setup.TDC TCS Mg-Alloys Database v1.1!
+TCBIN   TC_DATA/TCBIN/TCBINsetup.TDC TC Binary Solutions Database v1.1!
+SSOL5   TC_DATA/SSOL5/SSOL5setup.TDC SGTE Alloy Solutions Database v5.0!
+SSOL4   TC_DATA/SSOL4/SSOL4setup.TDC SGTE Alloy Solutions Database v4.9f!
+SSOL2   TC_DATA/SSOL2/SSOL2setup.TDC SGTE Alloy Solutions Database v2.1!
+SSUB5   TC_DATA/SSUB5/SSUB5setup.TDC SGTE Substances Database v5.1!
+SSUB4   TC_DATA/SSUB4/SSUB4setup.TDC SGTE Substances Database v4.1!
+SSUB3   TC_DATA/SSUB3/SSUB3setup.TDC SGTE Substances Database v3.3!
+SSUB2   TC_DATA/SSUB2/SSUB2setup.TDC SGTE Substances Database v2.2!
+SNOB3   TC_DATA/SNOB3/SNOB3setup.TDC SGTE Nobel Metal Alloys Database v3.1!
+SNOB2   TC_DATA/SNOB2/SNOB2setup.TDC SGTE Nobel Metal Alloys Database v2.1!
+SNOB1   TC_DATA/SNOB1/SNOB1setup.TDC SGTE Nobel Metal Alloys Database v1.2!
+STBC2   TC_DATA/STBC2/STBC2setup.TDC SGTE Thermal Barrier Coating TDB v2.2!
+STBC1   TC_DATA/STBC1/STBC1setup.TDC SGTE Thermal Barrier Coating TDB v1.1!
+SALT1   TC_DATA/SALT1/SALT1setup.TDC SGTE Molten Salts Database v1.2!
+SNUX6   TC_DATA/SNUX6/SNUX6setup.TDC SGTE In-Vessel Nuclear Oxide TDB v6.2!
+SEMC2   TC_DATA/SEMC2/SEMC2setup.TDC TC Semi-Conductors Database v2.1!
+SLAG3   TC_DATA/SLAG3/SLAG3setup.TDC TCS Fe-containing Slag Database v3.2!
+SLAG2   TC_DATA/SLAG2/SLAG2setup.TDC TCS Fe-containing Slag Database v2.2!
+SLAG1   TC_DATA/SLAG1/SLAG1setup.TDC TCS Fe-containing Slag Database v1.2!
+TCOX5   TC_DATA/TCOX5/TCOX5setup.TDC TCS Metal Oxide Solutions Database v5.1!
+TCOX4   TC_DATA/TCOX4/TCOX4setup.TDC TCS Metal Oxide Solutions Database v4.1!
+ION3    TC_DATA/ION3/ION3setup.TDC   TCS Ionic Solutions Database v3.0!
+ION2    TC_DATA/ION2/ION2setup.TDC   TCS Ionic Solutions Database v2.6!
+ION1    TC_DATA/ION1/ION1setup.TDC   TCS Ionic Solutions Database v1.5!
+NOX2    TC_DATA/NOX2/NOX2setup.TDC   NPL Oxide Solutions Database v2.1!
+NSLD2   TC_DATA/NSLD2/NSLD2setup.TDC NPL Solder Alloys Database v2.3!
+TCSLD1  TC_DATA/TCSLD1/TCSLD1setup.TDC TCS Solder Alloys Database v1.1!
+TCSLD2  TC_DATA/TCSLD2/TCSLD2setup.TDC TCS Solder Alloys Database v2.0!
+TCSI1   TC_DATA/TCSI1/TCSI1setup.TDC TCS Ultrapure Silicon Database v1.0!
+TCMP2   TC_DATA/TCMP2/TCMP2setup.TDC TCS Materials Processing Database v2.5!
+TCES1   TC_DATA/TCES1/TCES1setup.TDC TCS Combustion/Sintering Database v1.1!
+TCSC1   TC_DATA/TCSC1/TCSC1setup.TDC TCS Super Conductor Database v1.0!
+TCFC1   TC_DATA/TCFC1/TCFC1setup.TDC TCS SOFC Database v1.0!
+TCNF2   TC_DATA/TCNF2/TCNF2setup.TDC TCS Nuclear Fuels Database v2.1b!
+NUMT2   TC_DATA/NUMT2/NUMT2setup.TDC TCS Nuclear Materials Database v2.1!
+NUOX4   TC_DATA/NUOX4/NUOX4setup.TDC TCS Nuclear Oxides Database v4.2!
+NUTO1   TC_DATA/NUTO1/NUTO1setup.TDC TCS U-Zr-Si Ternary Oxides TDB v1.1!
+NUTA1   TC_DATA/NUTA1/NUTA1setup.TDC TCS Ag-Cd-In Ternary Alloys TDB v1.1!
+NUCL10  TC_DATA/NUCL10/NUCL10setup.TDC ThermoData NUCLEA Alloys-oxides TDB v10.2!
+MEPH11  TC_DATA/MEPH11/MEPH11setup.TDC ThermoData MEPHISTA Nuclear Fuels TDB v11!
+TTNI8   TC_DATA/TTNI8/TTNI8setup.TDC TT Ni-Alloys Database v8.3!
+TTNI7   TC_DATA/TTNI7/TTNI7setup.TDC TT Ni-Alloys Database v7.4!
+TTNI6   TC_DATA/TTNI6/TTNI6setup.TDC TT Ni-Alloys Database v6.3!
+TTNI5   TC_DATA/TTNI5/TTNI5setup.TDC TT Ni-Alloys Database v5.2!
+TTNF5   TC_DATA/TTNF5/TTNF5setup.TDC TT NiFe-Alloys Database v5.0!
+TTTI3   TC_DATA/TTTI3/TTTI3setup.TDC TT Ti-Alloys Database v3.1!
+TTTI2   TC_DATA/TTTI2/TTTI2setup.TDC TT Ti-Alloys Database v2.1!
+TTTIAL  TC_DATA/TTTIAL/TTTIALsetup.TDC TT TiAl-Alloys Database v1.1!
+$TTTA1  TC_DATA/TTTA1/TTTA1setup.TDC   TT TiAl-Alloys Database v1.1!
+TTAL8   TC_DATA/TTAL8/TTAL8setup.TDC TT Al-Alloys Database v8.1!
+TTAL7   TC_DATA/TTAL7/TTAL7setup.TDC TT Al-Alloys Database v7.1!
+TTAL6   TC_DATA/TTAL6/TTAL6setup.TDC TT Al-Alloys Database v6.1!
+TTAL5   TC_DATA/TTAL5/TTAL5setup.TDC TT Al-Alloys Database v5.1!
+TTAL4   TC_DATA/TTAL4/TTAL4setup.TDC TT Al-Alloys Database v4.1!
+TTAL3   TC_DATA/TTAL3/TTAL3setup.TDC TT Al-Alloys Database v3.1!
+TTMG5   TC_DATA/TTMG5/TTMG5setup.TDC TT Mg-Alloys Database v5.1!
+TTMG4   TC_DATA/TTMG4/TTMG4setup.TDC TT Mg-Alloys Database v4.2!
+TTMG3   TC_DATA/TTMG3/TTMG3setup.TDC TT Mg-Alloys Database v3.1!
+TTMG2   TC_DATA/TTMG2/TTMG2setup.TDC TT Mg-Alloys Database v2.1!
+TTZR1   TC_DATA/TTZR1/TTZR1setup.TDC TT Zr-Alloys Database v1.1!
+TCAQ2   TC_DATA/TCAQ2/TCAQ2setup.TDC TCS Aqueous Solution Database v2.7!
+AQS2    TC_DATA/AQS2/AQS2setup.TDC   TGG Aqueous Solution Database v2.5!
+GCE2    TC_DATA/GCE2/GCE2setup.TDC   TGG Geochemical/Environmental TDB v2.3!
+CCC1    TC_DATA/CCC1/CCC1setup.TDC   CCT Cemented Carbides Database v1.0!
+PURE5   TC_DATA/PURE5/PURE5setup.TDB SGTE Unary (Pure Elements) TDB v5.1!
+PSUB    TC_DATA/PSUB/PSUBsetup.TDB   TCS Public Pure Substances TDB v1.2!
+PBIN    TC_DATA/PBIN/PBINsetup.TDB   TCS Public Binary Alloys TDB v1.2!
+PTERN   TC_DATA/PTERN/PTERNsetup.TDB TCS Public Ternary Alloys TDB v1.3!
+PKP     TC_DATA/PKP/PKPsetup.TDB     Kaufman Binary Alloys TDB v1.1!
+PCHAT   TC_DATA/PCHAT/PCHATsetup.TDB Chatenay-Malabry Binary Alloys TDB v1.1!
+PG35    TC_DATA/PG35/PG35setup.TDB   G35 Binary Semi-Conductors TDB v1.2!
+PION    TC_DATA/PION/PIONsetup.TDB   TCS Public Ionic Solutions TDB v1.1!
+PAQ2    TC_DATA/PAQ2/PAQ2setup.TDB   TCS Public Aqueous Soln (SIT) TDB v2.4!
+PAQS2   TC_DATA/PAQS2/PAQS2setup.TDB TCS Public Aqueous Soln (HKF) TDB v2.4!
+PGEO    TC_DATA/PGEO/PGEOsetup.TDB   Saxena Pure Minerals Database v1.2!
+$... DICTRA Mobility Database: 
+MOB2    TC_DATA/MOB2/MOB2setup.TDC     TCS Alloys Mobility Database v2.4!
+MOB1    TC_DATA/MOB1/MOB1setup.TDC     TCS Alloys Mobility Database v1.3!
+MOBFE1  TC_DATA/MOBFE1/MOBFE1setup.TDC TCS Steels/Fe-Alloys Mobility Database v1.0! 
+MOBFE2  TC_DATA/MOBFE2/MOBFE2setup.TDC TCS Steels/Fe-Alloys Mobility Database v2.0! 
+MOBNI3  TC_DATA/MOBNI3/MOBNI3setup.TDC TCS Ni-Alloys Mobility Database v3.0! 
+MOBNI2  TC_DATA/MOBNI2/MOBNI2setup.TDC TCS Ni-Alloys Mobility Database v2.4! 
+MOBNI1  TC_DATA/MOBNI1/MOBNI1setup.TDC TCS Ni-Alloys Mobility Database v1.0!
+MOBAL3  TC_DATA/MOBAL3/MOBAL3setup.TDC TCS Al-Alloys Mobility Database v3.0! 
+MOBAL2  TC_DATA/MOBAL2/MOBAL2setup.TDC TCS Al-Alloys Mobility Database v2.0!
+MOBAL1  TC_DATA/MOBAL1/MOBAL1setup.TDC TCS Al-Alloys Mobility Database v1.0!
+MOBTI1  TC_DATA/MOBTI1/MOBTI1setup.TDC TCS Ti-Alloys Mobility Database v1.0!
+BISH    TC_DATA/BISH/BISHsetup.TDC     Bishop Dilute Al-Alloys MDB v1.0!
+OIKA    TC_DATA/OIKA/OIKAsetup.TDC     Oikawa Dilute Fe-Alloys MDB v1.0!
+PFRIB   TC_DATA/PFRIB/PFRIDsetup.TDB    Fridberg Dilute Fe-Alloys MDB v1.0!
+
+
+
+
+
+
