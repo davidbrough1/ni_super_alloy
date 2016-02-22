@@ -15,4 +15,4 @@ compilec:
 fortran:
 	clear
 	f2py -c -m irreverisble irreverisble.f90
-
+	cp irreverisble.so ./plasticdeformation

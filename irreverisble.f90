@@ -5,7 +5,7 @@
 !
 !!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-subroutine mechanics(Elasticity,modulus,vf_inp,p_stress,ss_stress,Tsam,samples,SS_necking)
+subroutine mechanics(Elasticity,modulus,vf_inp,p_stress,ss_stress,Tsam,samples,stress_strain,WTN)
 
   implicit none
 
@@ -14,7 +14,6 @@ subroutine mechanics(Elasticity,modulus,vf_inp,p_stress,ss_stress,Tsam,samples,S
   integer:: no_iter
 
   real*8, parameter:: pi=acos(-1.0d0)
-  integer:: ierr
 
   real*8:: mu_shmodulus(no_phase), burgers
   real*8:: density0(no_phase)
@@ -24,8 +23,7 @@ subroutine mechanics(Elasticity,modulus,vf_inp,p_stress,ss_stress,Tsam,samples,S
   real*8:: stress(no_phase)
   real*8:: stress_b, stress_in, stress_p(no_phase), necking_strength, necking_strain
   real*8:: stress_material(no_phase)
-  real*8:: SS0(2),SS0_temp,SS_temp(2,maxiterstep)
-  real*8:: WTN, WTN0
+  real*8:: SS_temp(2,maxiterstep)
   real*8:: Tfactor,alpha
   real*8:: gsize(no_phase)
   real*8:: C(no_phase), nmax(no_phase), n(no_phase), lumda(no_phase), Gact(no_phase)
@@ -51,7 +49,6 @@ subroutine mechanics(Elasticity,modulus,vf_inp,p_stress,ss_stress,Tsam,samples,S
   integer:: i, sam
   integer:: necking
   real*8:: Vf(no_phase)
-  character(len=32):: filename,midfilename
 
 ! /*/*/*/ inputs /*/*/*/
   real*8, dimension(samples), intent(in):: Elasticity
@@ -62,7 +59,8 @@ subroutine mechanics(Elasticity,modulus,vf_inp,p_stress,ss_stress,Tsam,samples,S
   integer, intent(in):: samples
 
 ! /-/-/-/ outputs /-/-/-/
-  real*8, dimension(samples*3), intent(out) :: SS_necking
+  real*8, dimension(maxiterstep), intent(out):: stress_strain
+  real*8, intent(out):: WTN
   integer:: ind_SS
 
   real*8:: SR(samples)
@@ -81,37 +79,13 @@ subroutine mechanics(Elasticity,modulus,vf_inp,p_stress,ss_stress,Tsam,samples,S
   SR=1d-3
   ind_SS=1
 
-! @@@@ Best through generations @@@@
-  open(10, file="mechanics/SS0.dat")
-
-  WTN0=0d0
-  SS0_temp=0d0
-
-  do while(.true.)
-    read(10,*,iostat=ierr) SS0(1),SS0(2)
-    if(ierr/=0) exit
-
-    WTN0=WTN0+(SS0(1)-SS0_temp)*SS0(2)
-    SS0_temp=SS0(1)
-  end do
-! @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
   do sam=1,samples
 
     if(Elasticity(sam) > 0d0) then
 
-!**** open SS files ****
-      i=20+sam        ! output the SS curve
-      write(midfilename,"(I1)") sam
-      filename="mechanics/SS"//trim(midfilename)//".dat"
-      open(i, file=filename, status='replace')
-      write(i,*) "0.0 "," 0.0"
-
-      i=50+sam        ! output the dStress/dStrain curve for necking
-      write(midfilename,"(I1)") sam
-      filename="mechanics/dsds"//trim(midfilename)//".dat"
-      open(i, file=filename, status='replace')
-!***********************
+      stress_strain(1)=0d0
+      stress_strain(2)=0d0
 
       strain_rate=SR(sam)*2.5d0/0.83d0 ! shear strain rate
 
@@ -205,9 +179,6 @@ subroutine mechanics(Elasticity,modulus,vf_inp,p_stress,ss_stress,Tsam,samples,S
             stress(i)=0.0d0
             stress(i)=stress_material(i) + stress_b + sqrt(stress_in**2.0d0 + stress_p(i)**2.0d0)
 
-!write(99,*) stress_material(i)*Tfactor,stress_b*Tfactor,stress_in*Tfactor,stress_p(i)*Tfactor
-!write(98,*) mu_shmodulus(i),burgers,nmax(i),(1.0d0-exp(-lumda(i)*dstrain(i)/(burgers*nmax(i)))),dstrain(i),gsize(i)
-
             const1=mu_shmodulus(i)*(burgers**2.0d0)+stress(i)*burgers/sqrt(densityin(i))
 
             k1=const1*nusrdG(i)*densityin(i)
@@ -251,7 +222,8 @@ subroutine mechanics(Elasticity,modulus,vf_inp,p_stress,ss_stress,Tsam,samples,S
         SS_temp(2,no_iter)=totstress
 
         WTN=WTN+totstress*(totstrain-totstrain_p)
-        write(20+sam,*) (totstrain+elastic_strain)*100d0,totstress
+        stress_strain(2*foritergor+3)=(totstrain+elastic_strain)*100d0
+        stress_strain(2*foritergor+4)=totstress
 
         if(isnan(totstrain) .or. isnan(totstress)) goto 1979
 
@@ -264,28 +236,9 @@ subroutine mechanics(Elasticity,modulus,vf_inp,p_stress,ss_stress,Tsam,samples,S
         end do
 
         dsds=(totstress-totstress_p)/(totstrain-totstrain_p)
-        if(totstrain > 0.0d0 ) write(50+sam,*) (totstrain+elastic_strain)*100d0,dsds
 
         if(dsds <= totstress .and. necking==0) then
           necking=1
-!          write(*,*) sam, totstress,totstrain+elastic_strain
-
-          SS_necking(ind_SS)=totstress
-          ind_SS=ind_SS+1
-          SS_necking(ind_SS)=(totstrain+elastic_strain)*100d0
-          ind_SS=ind_SS+1
-          SS_necking(ind_SS)=WTN
-          ind_SS=ind_SS+1
-
-
-          if(WTN > WTN0) then
-            rewind(10)
-            do i=1,no_iter
-              write(10,*) SS_temp(1,i),SS_temp(2,i)
-            end do
-
-            WTN0=WTN
-          end if
 
           goto 1979
         end if
@@ -302,11 +255,11 @@ subroutine mechanics(Elasticity,modulus,vf_inp,p_stress,ss_stress,Tsam,samples,S
       end do
 
     else
-      SS_necking(ind_SS)=0d0
+      stress_strain(ind_SS)=0d0
       ind_SS=ind_SS+1
-      SS_necking(ind_SS)=0d0
+      stress_strain(ind_SS)=0d0
       ind_SS=ind_SS+1
-      SS_necking(ind_SS)=0d0
+      stress_strain(ind_SS)=0d0
       ind_SS=ind_SS+1
     end if
 
