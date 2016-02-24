@@ -49,9 +49,10 @@ elastic_modulus = (elas_gamma, elas_gammaprime)
 no_samples = 1
 
 print "Irreversible:",time.asctime(time.localtime(time.time()))
-Stress_strain = irreverisble.mechanics(Elasticity,elastic_modulus,vf,prec_stress,SS_stress,T_service,no_samples)
-Stress_strain = np.array(Stress_strain).reshape(no_samples,3)
+Stress_strain, WTN = irreverisble.mechanics(Elasticity,elastic_modulus,vf,prec_stress,SS_stress,T_service,no_samples)
+Stress_strain = np.array(np.trim_zeros(Stress_strain)).reshape(-1,2)
 
-print 'UTS, MPa: ',Stress_strain[0][0],'  Strain_UTS, %:',Stress_strain[0][1],'  Work to necking, MPa%',Stress_strain[0][2]
+
+print 'UTS, MPa: ',Stress_strain[-1,0],'  Strain_UTS, %:',Stress_strain[-1,1],'   Work to Necking:', WTN
 
 
