@@ -42,12 +42,10 @@
 #include "tcapi.h"
 #include "tcutils.h"
 
-extern void anns_lp_gprime_(double *, double *, double *, double *);
-extern void anns_lp_gamma_(double *, double *, double *, double *);
 
 double *API_TC(int generation,int no_samples, int start_samples, int no_variables, double *XT)
 {
- /* ++++ Variables for TCAPI ++++ */ 
+ // ++++ Variables for TCAPI ++++
   char *conditions,*conditions2;
   char error[80];
   char *log_file_directory;
@@ -56,7 +54,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
   TC_INT ierr;
   double value;
 
- /* ++++ Variables for process ++++ */ 
+ // ++++ Variables for process ++++
   int i, j, ii, jj;
   int sam, ind_XT;
   const int wstep=500,winterval=1E5;
@@ -65,12 +63,12 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
   int count_results;
   const double ST_error=0.00001;
 
- /* ++++ Variables for phsical quantities ++++ */ 
+ // ++++ Variables for phsical quantities ++++
   int no_elements, no_elem_input;
   char *chem_elements[TC_MAX_NR_OF_ELEMENTS];    // max=40
   double chem_composition[TC_MAX_NR_OF_ELEMENTS];
   double tot_dg;
- /* Two temperatures: (1) for heat treatment (2) service temperature */
+ // Two temperatures: (1) for heat treatment (2) service temperature
   double temperature;
   double T_service;
 
@@ -118,7 +116,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
   double xal,xcr;
   double g_LP,gp_LP,misfit_LP,temp_LP;
   double APB_gp_LP;
-  double anns_g_LP, anns_gp_LP;
+
 
 // ------------- Kintics of Precipitate ------------
   int time_step;
@@ -165,7 +163,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
   double chem_comp_matrixint[TC_MAX_NR_OF_ELEMENTS];
   double k_chem;
 
-/* Qing et al., Analytical treatment..., Acta, 2008 */
+// Qing et al., Analytical treatment..., Acta, 2008
   double omega,lambda,C_growth,func_lambda;
   double lambda_max,lambda_min;
   double error_beta_fl;
@@ -231,12 +229,11 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
   double YieldStress;  
 
   double temp;
+ 
+//  Two models are implemented for calculating maximum yield stress
+//    0) iterative calculation to get the cross stress of weak pair and strong pair dislocation
+//    1) derivative of the strong pair dislocation model (Crudden et al, Acta Mat, 2014)
 
-/* 
-  Two models are implemented for calculating maximum yield stress
-    0) iterative calculation to get the cross stress of weak pair and strong pair dislocation
-    1) derivative of the strong pair dislocation model (Crudden et al, Acta Mat, 2014)
-*/
   const int max_stress_model=0;
 
 
@@ -288,7 +285,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
 
     printf("========== SAMPLE:  %i ============\n",sam);
 // ***** Calculate Enthalpy of FCC_L12 *****
- /* ++++ RE-Initialize the system ++++ */
+// ++++ RE-Initialize the system ++++
 //    tc_deinit();
 //    log_file_directory = ".";
 //    tc_installation_directory = ".";
@@ -306,7 +303,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
 
     tc_get_data();
 
- /* ++++ Setup invariant conditions ++++ */
+// ++++ Setup invariant conditions ++++
     tc_set_condition("N",1);
     tc_set_condition("P",101325);
 
@@ -328,7 +325,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
     shear_modulus=(298.*3./8.)*(1.-0.5*(T_service-300.)/1673.)*1E+9;
 
 
-/* the excess enthalpy for Short rang ordering */
+// the excess enthalpy for Short rang ordering
 // NIST database
     SRO_parameter[1]=6*(-13415.515+2.0819247*T_service);
     SRO_parameter[2]=6*(-4300.);
@@ -352,7 +349,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
     }
 
 
- /* ++++ Compute the equilibrium ++++ */
+ // ++++ Compute the equilibrium ++++
     tc_compute_equilibrium();
 
     ierr=0;
@@ -370,7 +367,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
       continue;
     }
 
- /* ---- Retrieve the desired value ---- */
+ // ---- Retrieve the desired value ----
     tot_Vf=0.0;
     HVf=0.0;
     no_ordered=0;
@@ -416,10 +413,6 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
         if(VF[i] > HVf){
           ind_L12 = i;
           HVf=VF[i];
-
-//          PTOT=0.;
-//          PTOT=site_f_Ni[1]*(1.-site_f_Ni[1])*site_f_Ni[2]*(1.-site_f_Ni[2]);
-//          printf("PTOT: %f, %f, %f, %f \n",site_f_Ni[1],(1.-site_f_Ni[1]),site_f_Ni[2],1.-site_f_Ni[2]);
 
           for(j=0;j<no_elements;j++){
             chem_comp_gp[j]=0.0;
@@ -522,13 +515,6 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
     printf("Equilibrium Vf_L12: %E \n",VF[ind_L12]);
 // ---------------------------------------------------------------------
     tc_set_condition("T",T_service);
-
-/*
-    chem_comp_gp[1]=0.247;
-    chem_comp_gp[0]=1.-chem_comp_gp[1];
-    tc_set_condition("X(AL)",chem_comp_gp[1]);
-*/
-
     tc_compute_equilibrium();
 
 // ++++ Density of the alloy ++++
@@ -538,7 +524,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
 //    printf("Density,   g/cm^3: %f\n",density_all);
 
 
-/* ------------- dH_L12 -------------   */
+// ------------- dH_L12 -------------
     tc_init_root3(log_file_directory, tc_installation_directory);
     tc_open_database("TCNI6");
 
@@ -569,7 +555,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
 
     HM_FCCL12_DA=tc_get_value("HM");
 
-/*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ The model to calculate SRO Energy ++++++ */
+//  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ The model to calculate SRO Energy ++++++
 // +++++++++ Calculating Enthalpy of FCC_A1 +++++++++++++++
 //    tc_deinit();
 //    log_file_directory = ".";
@@ -597,7 +583,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
     tc_phase_select("FCC_A1");
     tc_get_data();
 
- /* ++++ Setup invariant conditions ++++ */
+// ++++ Setup invariant conditions ++++
     tc_set_condition("N",1.);
     tc_set_condition("P",101325);
     tc_set_condition("T",T_service);
@@ -609,7 +595,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
       tc_set_condition(conditions,chem_comp_gp[i]);
     }
 
- /* ++++ Compute the equilibrium ++++ */
+// ++++ Compute the equilibrium ++++
     tc_compute_equilibrium();
 
     ierr=0;
@@ -631,8 +617,8 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
 //    printf("HM:  %f,  %f \n",HM_FCCA1_DA,HM_FCCL12_DA);
 
 
-/* ========================================================================= SRO Model ======== */
-/*  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ (1) Miodownik 1995 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$ */
+// ========================================================================= SRO Model ========
+//  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ (1) Miodownik 1995 $$$$$$$$$$$$$$$$$$$$$$$$$$$$$
     if (SRO_model == 0){
 
 //printf("sum:::: %E \n",HM_FCCA1_DA+HM_FCCL12_DA);
@@ -641,7 +627,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
 //printf("sum:::: %E \n",HM_FCCA1+HM_FCCL12);
 //      printf("H:  %f, %f, %f, %f \n",HM_FCCA1_DA,HM_FCCA1,HM_FCCL12_DA,HM_FCCL12);
     }
-/*  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ (2) Sundman CALPHAD 22 1998 $$$$$$$$$$$$$$$$$$$$ */
+//  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ (2) Sundman CALPHAD 22 1998 $$$$$$$$$$$$$$$$$$$$
     else if (SRO_model == 1){
 
       asprintf(&conditions,"%s","y(FCC_A1#1,NI#1)");
@@ -674,7 +660,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
         tc_reset_error();
       }
 
- /* ++++ Compute the equilibrium ++++ */
+// ++++ Compute the equilibrium ++++
       tc_compute_equilibrium();
 
       ierr=0;
@@ -702,7 +688,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
         tc_reset_error();
      }
 
- /* ++++ Compute the equilibrium ++++ */
+// ++++ Compute the equilibrium ++++
       tc_compute_equilibrium();
 
       ierr=0;
@@ -716,7 +702,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
 
       HM_PURE[1] = tc_get_value("HM(FCC_A1)");
 
-/* --- 0.5NI-0.5AL ---*/
+// --- 0.5NI-0.5AL ---
       tc_set_condition("X(AL)",0.5);
       ierr=0;
       if ( tc_error(&ierr,error,sizeof(error)) ) {
@@ -725,7 +711,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
         tc_reset_error();
      }
 
- /* ++++ Compute the equilibrium ++++ */
+// ++++ Compute the equilibrium ++++
       tc_compute_equilibrium();
 
       ierr=0;
@@ -740,23 +726,23 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
       HM_FCCA1_55 = tc_get_value("HM(FCC_A1)");
 
 
-/* Sundman, CALPHAD, 22, 1998, 335  */
+// Sundman, CALPHAD, 22, 1998, 335
 //    W2_AB=(HM_FCCA1_DA-HM_PURE[0])*(HM_FCCA1_DA-HM_PURE[0]);
-/* Abe, Computer Coupling of Phase Diagrams and Tech, 27, 2003, 403.  */
+// Abe, Computer Coupling of Phase Diagrams and Tech, 27, 2003, 403.
 //    W2_AB=(HM_FCCA1_DA+(1.0-chem_comp_gp[1])*HM_PURE[0]+chem_comp_gp[1]*HM_PURE[1]);
 
-/* --- My model --- */
+// --- My model ---
       W2_AB=(HM_FCCA1_55-2.*(HM_PURE[0]+HM_PURE[1]));
 
 //    printf("W2AB: %f, %f, %f, %f \n",W2_AB,HM_FCCA1_DA,HM_PURE[0],HM_PURE[1]);
-/* ()()()()()()()()()()()()()()()()()()()()()()()() */
+// ()()()()()()()()()()()()()()()()()()()()()()()()
 
 //    Z_coordinate=4.;
 //    printf("for SRO: %f, %f, %f \n",Z_coordinate,PTOT,temperature);
 
-/* Sundman, CALPHAD, 22, 1998, 335  */
+// Sundman, CALPHAD, 22, 1998, 335
 //    HM_SRO=-(Z_coordinate*PTOT*W2_AB)/(R_gas*temperature);
-/* Abe, Computer Coupling of Phase Diagrams and Tech, 27, 2003, 403.  */
+// Abe, Computer Coupling of Phase Diagrams and Tech, 27, 2003, 403.
 
       HM_SRO=0.;
       for(i=1;i<no_elements;i++){
@@ -769,7 +755,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
       HM_FCCA1=HM_FCCA1_DA-HM_SRO;
       HM_FCCL12=HM_FCCL12_DA+HM_SRO;
     }
-/*  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ (3) Ansara J Alloys and Compounds 247 1997 $$$$$$$$ */
+//  $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ (3) Ansara J Alloys and Compounds 247 1997 $$$$$$$$
     else{
 
       asprintf(&conditions,"%s","y(FCC_A1#1,NI#1)");
@@ -806,12 +792,12 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
 //    printf("Nickle content in gamma prime: %f\n",xNI);
     xsolution=1.-xNI;
 
-/* ^^^^^^^^^^^^^^^^^^^^^^^^^ Collins, 2014 ^^^^^^^^^^^^^^^^^^^^^^^^^  
-    V_eff_13=-( 3.*HM_FCCA1+HM_FCCL12*(1.-xsolution)/xsolution )/( 24.*Avogadro*xsolution*(1.-xsolution) );   // Collins, 2014
-    V_2=( HM_FCCL12*(1.-xsolution) - HM_FCCA1*xsolution )/ (12.*Avogadro*pow(xsolution,2.)*(1.-xsolution) );  // Collins, 2014
-*/
+// ^^^^^^^^^^^^^^^^^^^^^^^^^ Collins, 2014 ^^^^^^^^^^^^^^^^^^^^^^^^^
+//    V_eff_13=-( 3.*HM_FCCA1+HM_FCCL12*(1.-xsolution)/xsolution )/( 24.*Avogadro*xsolution*(1.-xsolution) );   // Collins, 2014
+//    V_2=( HM_FCCL12*(1.-xsolution) - HM_FCCA1*xsolution )/ (12.*Avogadro*pow(xsolution,2.)*(1.-xsolution) );  // Collins, 2014
 
-/* ^^^^^^^^^^^^^^^^^^^^^^^  Crudden, 2014 ^^^^^^^^^^^^^^^^^^^^^^ */
+
+// ^^^^^^^^^^^^^^^^^^^^^^^  Crudden, 2014 ^^^^^^^^^^^^^^^^^^^^^^
     V_eff_13=-( 3.*HM_FCCA1+HM_FCCL12*(1.-xsolution)/xsolution )/( 24.*R_gas*xsolution*(1.-xsolution) );
     V_2=( HM_FCCL12*(1.-xsolution) - HM_FCCA1*xsolution )/ (12.*R_gas*pow(xsolution,2.)*(1.-xsolution) );
 
@@ -823,18 +809,6 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
 
 //    printf("Ws: %E, %E, %E \n",V_1/unit_k,V_2/unit_k,V_3/unit_k);
 
-/* --- Lattice parameter using ANNs by H Bhadeshia ---
-    xal=chem_comp_gp[1];
-    xcr=chem_comp_gp[2];
-    anns_gp_LP=0.;
-    anns_lp_gprime_(&T_service, &xal, &xcr, &anns_gp_LP);
-    anns_gp_LP=anns_gp_LP*1E-10;
-    printf("Lattice Parameter: %E %E; Composition: %E %E \n",gp_LP,anns_gp_LP,xal,xcr);
-*/
-
-//    EAPB=(V_1 - 3.*V_2 + 4.*V_3)/(sqrt(3.)*pow(anns_gp_LP*1E-10,2.));  // Collins, 2014
-//    EAPB=(V_1 - 3.*V_2 + 4.*V_3)/(sqrt(3.)*pow(anns_gp_LP,2.)*1E+3);  // Crudden, 2014
-//    EAPB=(V_1 - 3.*V_2 + 4.*V_3)/(sqrt(3.)*pow(gp_LP*1E+10,2.)*1E+3);
     EAPB=(V_1 - 3.*V_2 + 4.*V_3)/(sqrt(3.)*pow(APB_gp_LP*1E+10,2.)*1E+3);
 
     if ( EAPB<0.01 ) {
@@ -845,8 +819,8 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
     printf("EAPB: %E  J/m^2\n",EAPB);
 
 
-/* =================================================== Kinetic simulation of gamma_prime precipitation ===== */
- /* ++++ Setup invariant conditions ++++ */
+// =================================================== Kinetic simulation of gamma_prime precipitation =====
+ // ++++ Setup invariant conditions ++++
     tc_set_condition("N",1.);
     tc_set_condition("P",101325);
     tc_set_condition("T",temperature);
@@ -865,7 +839,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
       tc_reset_error();
     }
 
- /* ++++ Compute the equilibrium ++++ */
+ // ++++ Compute the equilibrium ++++
     tc_compute_equilibrium();
 
     ierr=0;
@@ -877,23 +851,6 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
       continue;
     }
 
-/* --- Lattice parameter using ANNs by H Bhadeshia --- 
-    xal=chem_comp_gp[1];
-    xcr=chem_comp_gp[2];
-    anns_gp_LP=0.;
-    anns_lp_gprime_(&temperature, &xal, &xcr, &anns_gp_LP);
-    anns_gp_LP=anns_gp_LP*1E-10;
-    mvolume_gp=pow(anns_gp_LP,3.)*(Avogadro/4.);
-    gp_LP=anns_gp_LP;
-
-    xal=chem_comp_gamma[1];
-    xcr=chem_comp_gamma[2];
-    anns_g_LP=0.;
-    anns_lp_gamma_(&temperature, &xal, &xcr, &anns_g_LP);
-    anns_g_LP=anns_g_LP*1E-10;
-    mvolume_gamma=pow(anns_g_LP,3.)*(Avogadro/4.);
-    g_LP=anns_g_LP;
-*/
 
     GM_0=0.0;   // total fre energy of the system before phase transformation
     asprintf(&conditions,"%s","GM");
@@ -945,15 +902,6 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
     }
 
     printf("dG Nucleation: %E %E \n",dGM_NU,dGM_NU/mvolume_gp );   
-
-/*
-    temp_LP=0.0;
-    asprintf(&conditions,"%s","VM(FCC_A1)");
-    temp_LP=tc_get_value(conditions);
-
-    g_LP=pow(temp_LP/(Avogadro/4.),1./3.);
-    printf("Molar Volume of FCC_A1, m^3: %E, %E \n",mvolume_gp,g_LP);
-*/
 
 // Wagner, Homogeneous Second-Phase Precipitation, 200
     dGM_EL=0.;
@@ -1032,7 +980,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
 //    printf("Total volume fraction of L12: %E \n", Vf_gp_eq);
 
     dGM_critical=16.*pi*pow(E_intfac,3)/(3.*pow(((dGM_NU+dGM_EL)/mvolume_gp),2));
-/* Svoboda et al., 2004 & TC-Presima  */
+// Svoboda et al., 2004 & TC-Presima 
 //    printf("Chemical Driving Force: %E \n", dGM_critical);
 
 
@@ -1224,7 +1172,7 @@ double *API_TC(int generation,int no_samples, int start_samples, int no_variable
 
 //if(time_step%10==1 ){printf("(1) time: %d  %d: %d \n",generation,sam,time_step); }
 printf("(1) time: %d, %E, %E \n",time_step,dtime,tot_time);
-    /* ----------------------------------------- Model 1: Avrami type of simulation; the number of particles are not counted --- */
+    // ----------------------------------------- Model 1: Avrami type of simulation; the number of particles are not counted ---
         if(kinetics_model==0){
           gp_mean_radius=pow((pow(gp_radius0,3)+K_LSW*tot_time),(1./3.));
           Vf_gp=Vf_gp_eq*(1.-exp(-pi*no_nu_site*exp(-time_incu/tot_time)*pow(Velocity_int,3)*pow(tot_time,4)/3.));
@@ -1233,16 +1181,9 @@ printf("(1) time: %d, %E, %E \n",time_step,dtime,tot_time);
 	  weak_stress=3.06*EAPB*( ( sqrt(C1*EAPB*Vf_gp*gp_mean_radius/LT) - Vf_gp )/(2.*burgers))/1E+6;
 	  strong_stress=3.06*C2*sqrt(Vf_gp*cw*cw*(pi*gp_mean_radius*EAPB/(cw*LT)-1.))*(shear_modulus*burgers/gp_mean_radius)/1E+6;
 
-	  /*
-	     if(strong_stress<weak_stress){
-	     Prec_stress=(strong_stress+strong_stress_p)/2.;
-	     break;
-	     }
-	     strong_stress_p=strong_stress;
-	   */
 	}
 
-	/* -------------------- Model 2: volume fraction of gamma prime = (#nuclei site * one particle volume / total volume) ----- */
+	// -------------------- Model 2: volume fraction of gamma prime = (#nuclei site * one particle volume / total volume) -----
 	else{
 
 		tot_precipitate[time_step]=tot_precipitate[time_step-1];
@@ -1279,7 +1220,6 @@ printf("(1) time: %d, %E, %E \n",time_step,dtime,tot_time);
 		}
 
 		//printf("------- %d, %E, %E, %d, %d \n",time_step,precipitates[2][1],gp_mean_radius_p,oncoarsening,onnucleation);
-//printf("(2) *************  \n");
 
 		for(i=1;i<=no_calc_prec_steps;i++){
 
@@ -1312,7 +1252,7 @@ printf("(1) time: %d, %E, %E \n",time_step,dtime,tot_time);
 
 			tot_Vf+=Vf_gp;
 			tot_Part+=precipitates[1][i];
-			/* =========================================================== For Mean Radius of GP ==== */
+			// =========================================================== For Mean Radius of GP ====
 			//            gp_mean_radius+=precipitates[2][i]*Vf_gp;
 			gp_mean_radius+=precipitates[2][i]*precipitates[1][i];
 
@@ -1336,11 +1276,7 @@ printf("(1) time: %d, %E, %E \n",time_step,dtime,tot_time);
                           if(precipitates[1][i]<=0.){
                             precipitates[1][i]=0.;
                             no_prec_steps=i-1;
-/*
-printf("ERROR: Nucleation- %E, %E, %E, %E \n", precipitates[1][i],(tot_Vf-Vf_gp_eq)/precipitates[3][i],tot_Vf-Vf_gp_eq,precipitates[3][i]);
-printf("%E \n",precipitates[1][i]+(tot_Vf-Vf_gp_eq)/precipitates[3][i]);
-exit(0);
-*/
+
                           }
                           else{
                             no_prec_steps=i;
@@ -1349,21 +1285,7 @@ exit(0);
                         }
 		}
 
-/*
-                for(i=1;i<=no_calc_prec_steps;i++){
-                  if( (time_step<=wstep || (time_step%(max_time_step/winterval))==0) ){
-                    if(time_step>wstep && precipitates[1][i]>0){
-fprintf(file_ki,"%d, %E, %E, %E, %E, %E, %E, %E, %E, %E \n",time_step,(tot_time+time_incu)/60.,precipitates[1][i],precipitates[2][i]*1E+9,K_LSW,dG_int,dGM_NU,dGM_critical,dG_grow,tot_Part);
-fprintf(file_comp,"%d, %E, %E, %E, %E, %E, %E, %E \n",time_step,(tot_time+time_incu)/60.,chem_comp_trans[1],chem_comp_gp[1],chem_comp_gamma[1],chem_comp_trans[2],chem_comp_gp[2],chem_comp_gamma[2]);
-                    }
 
-                    if( time_step<wstep && (time_step%100)==0 ){
-fprintf(file_ki,"%d, %E, %E, %E, %E, %E, %E, %E, %E, %E \n",time_step,(tot_time+time_incu)/60.,precipitates[1][i],precipitates[2][i]*1E+9,K_LSW,dG_int,dGM_NU,dGM_critical,dG_grow,tot_Part);
-fprintf(file_comp,"%d, %E, %E, %E, %E, %E, %E, %E \n",time_step,(tot_time+time_incu)/60.,chem_comp_trans[1],chem_comp_gp[1],chem_comp_gamma[1],chem_comp_trans[2],chem_comp_gp[2],chem_comp_gamma[2]);
-                    }
-                  }
-                }
-*/
 		gp_mean_radius=gp_mean_radius/tot_Part;
 
 		weak_stress=3.06*EAPB*( ( sqrt(C1*EAPB*tot_Vf*gp_mean_radius/LT) - tot_Vf )/(2.*burgers))/1E+6;
@@ -1375,7 +1297,6 @@ fprintf(file_comp,"%d, %E, %E, %E, %E, %E, %E, %E \n",time_step,(tot_time+time_i
                   // 2D plane: the radius of particle is ignored because of the gemortric error- d<0
                   Orwan_stress=3.06*shear_modulus*burgers/(sqrt(pi/tot_Vf)*gp_mean_radius*1E+6);
 
-               /*   */
 //               Orwan_stress=3.06*shear_modulus*burgers
 
 //printf("Orowan: %E %E %E %E %E \n",Orwan_stress,shear_modulus,burgers,pow((4.*pi*pow(gp_mean_radius,3.)/(3.*tot_Vf)),1./3.),2.*gp_mean_radius);
@@ -1384,19 +1305,6 @@ fprintf(file_comp,"%d, %E, %E, %E, %E, %E, %E, %E \n",time_step,(tot_time+time_i
 		if ( (strong_stress != strong_stress) || (strong_stress<0.) ){strong_stress=0.; }
 		if ( (weak_stress != weak_stress) || (weak_stress<0.) ){weak_stress=0.; }
                 if ( (Orwan_stress != Orwan_stress) || (Orwan_stress<0.) ){Orwan_stress=0.; }
-
-/*
-                if( gp_mean_radius>=gp_mean_radius_p ){
-                  if((strong_stress<strong_stress_p) || (Orwan_stress<Orwan_stress_p) ){
-                    if((strong_stress<weak_stress) || (Orwan_stress<strong_stress) || (Orwan_stress<weak_stress) ){
-                      printf("*-*-*-*-* Max Yield Stress: %E, %E, %E *-*-*-*-*\n",YS,YS_0+SS_stress+HP_stress+Back_stress,Prec_stress);
-                      printf("Volume fraction & Mean radius: %E, %E \n",tot_Vf,gp_mean_radius);
-                      printf("P_stress: %E, %E, %E \n",weak_stress,strong_stress,Orwan_stress);
-                      break;
-                    }
-                  }
-                }
-*/
 
                 gp_mean_radius_p=gp_mean_radius;
                 strong_stress_p=strong_stress;

@@ -60,7 +60,7 @@ no_variables = no_variables/no_samples
 T_service = float(GA_select['ngcInputs']['serviceTemperature']['value'])
 
 
-
+print variables,T_service
 
 
 #---------------------------------------------- Knime start from here
@@ -86,4 +86,9 @@ Elasticity = np.array([0]*no_samples,dtype=float)
 
 microstructure = EQ_TCAPI(gen,no_samples,start_samples,no_variables,variables,ini_nudensity,no_outputs)
 
+print "volume fraction:", microstructure[0]
+print "mean radius (m):", microstructure[1]
+print "yield stress (MPa):", microstructure[5]
+print "precipitation stress (MPa):", microstructure[4]
+print "processing time (min):", microstructure[9]
 
